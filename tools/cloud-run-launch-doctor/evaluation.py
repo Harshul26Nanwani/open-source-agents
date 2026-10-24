@@ -9,6 +9,7 @@ from log_diagnosis import diagnose_log_file
 EXPECTED_LABELS = {
     "port_failure.log": "PORT_BIND_FAILURE",
     "port_failure_alt.log": "PORT_BIND_FAILURE",
+    "google_docs_port_failure.log": "PORT_BIND_FAILURE",
     "port_healthy_unknown.log": "UNCLASSIFIED_LOG",
     "missing_dependency.log": "MISSING_DEPENDENCY",
     "missing_dependency_alt.log": "MISSING_DEPENDENCY",
@@ -21,9 +22,11 @@ EXPECTED_LABELS = {
     "startup_healthy_unknown.log": "UNCLASSIFIED_LOG",
     "memory_limit.log": "MEMORY_LIMIT",
     "memory_limit_alt.log": "MEMORY_LIMIT",
+    "google_docs_memory_limit.log": "MEMORY_LIMIT",
     "memory_healthy_unknown.log": "UNCLASSIFIED_LOG",
     "startup_probe.log": "STARTUP_PROBE_FAILURE",
     "startup_probe_alt.log": "STARTUP_PROBE_FAILURE",
+    "google_docs_no_instance.log": "NO_AVAILABLE_INSTANCE",
     "probe_healthy_unknown.log": "UNCLASSIFIED_LOG",
     "unknown.log": "UNCLASSIFIED_LOG",
 }

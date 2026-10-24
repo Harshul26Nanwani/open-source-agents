@@ -9,8 +9,9 @@ PATTERNS = (
         "code": "PORT_BIND_FAILURE",
         "confidence": "high",
         "pattern": re.compile(
-            r"failed to start and listen on the port|did not start listening on "
-            r"the port|failed to bind.*port|container failed to start and listen",
+            r"failed to start and (?:then )?listen on the port|"
+            r"did not start listening on the port|failed to bind.*port|"
+            r"container failed to start and listen",
             re.IGNORECASE,
         ),
         "cause": "The container did not become ready on the port Cloud Run provided.",
@@ -67,7 +68,7 @@ PATTERNS = (
         "confidence": "medium",
         "pattern": re.compile(
             r"oomkilled|out of memory|memory limit.*exceed|"
-            r"memory usage.*exceed",
+            r"memory usage.*exceed|using too much memory.*terminated",
             re.IGNORECASE,
         ),
         "cause": "The instance may have exceeded its configured memory limit.",
@@ -88,6 +89,23 @@ PATTERNS = (
         "next_step": (
             "Check startup logs, probe path and port, and whether initialization "
             "completes within the configured startup window."
+        ),
+    },
+    {
+        "code": "NO_AVAILABLE_INSTANCE",
+        "confidence": "medium",
+        "pattern": re.compile(
+            r"request was aborted because there was no available instance|"
+            r"no available container instance",
+            re.IGNORECASE,
+        ),
+        "cause": (
+            "Cloud Run could not route the request to an available instance; "
+            "the service may be at its instance limit or unable to scale quickly enough."
+        ),
+        "next_step": (
+            "Check maximum-instance limits, startup and request latency, and "
+            "traffic spikes before changing scaling limits."
         ),
     },
 )

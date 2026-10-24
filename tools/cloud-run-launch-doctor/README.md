@@ -19,7 +19,7 @@ The goal is to shorten the path from a failed deployment to a useful investigati
 ### Key Features
 - Checks for common runtime manifests and basic Dockerfile startup configuration.
 - Flags likely Python bind-address/port and Node.js `process.env.PORT` issues.
-- Diagnoses common port, dependency, startup-command, memory, and startup-probe log failures with exact line evidence.
+- Diagnoses common port, dependency, startup-command, memory, startup-probe, and scaling log failures with exact line evidence.
 - Optionally cross-references a log diagnosis with related checks from the local service directory.
 - Labels unknown logs as unclassified instead of inventing a cause.
 - Redacts common credential formats from matched log evidence.
@@ -126,7 +126,7 @@ python main.py --diagnose-log path\to\cloud-run.log --project path\to\service --
 python main.py --diagnose-log path\to\cloud-run.log --explain --explain-timeout 90
 ```
 
-The log diagnosis workflow recognizes known signatures for port binding, missing runtime dependencies, dependency build failures, startup commands, memory limits, and startup probes. Use `--project` to compare the log diagnosis with related local static checks. Run `python evaluate_fixtures.py` to print the offline benchmark as JSON. `--explain` requires Google ADK and `GOOGLE_API_KEY`; the default wait limit is 45 seconds and can be changed with `--explain-timeout`. Choose a different Gemini model with `--model model-name`.
+The log diagnosis workflow recognizes known signatures for port binding, missing runtime dependencies, dependency build failures, startup commands, memory limits, startup probes, and unavailable instances. Use `--project` to compare the log diagnosis with related local static checks. Run `python evaluate_fixtures.py` to print the offline benchmark as JSON. `--explain` requires Google ADK and `GOOGLE_API_KEY`; the default wait limit is 45 seconds and can be changed with `--explain-timeout`. Choose a different Gemini model with `--model model-name`.
 
 Exit codes: `0` means no errors (and, in strict mode, no warnings); `1` means findings include errors or strict-mode warnings; `2` means the supplied path is not a directory.
 
@@ -162,7 +162,7 @@ From this directory, run:
 python -m unittest discover -s tests -v
 ```
 
-The tests use temporary directories and checked-in synthetic log fixtures. They do not require network access, ADK, or cloud credentials. Run `python evaluate_fixtures.py` for accuracy, macro F1, per-category precision/recall/F1, and a confusion matrix. The checked-in synthetic regression set currently contains 19 cases. Its result is not evidence of real-world accuracy.
+The tests use temporary directories and checked-in log examples. They do not require network access, ADK, or cloud credentials. Run `python evaluate_fixtures.py` for accuracy, macro F1, per-category precision/recall/F1, and a confusion matrix. The fixture set includes synthetic cases and short error examples from Google's public [Cloud Run troubleshooting guide](https://docs.cloud.google.com/run/docs/troubleshooting). These examples check compatibility with documented wording; they are not customer logs or a representative production benchmark, and their score is not evidence of real-world accuracy.
 
 To evaluate real examples locally, create a private dataset directory with `labels.json` and one log file per case. Keep the directory outside version control and remove or redact personal data, tokens, project IDs, and customer identifiers before evaluation. Example manifest:
 
